@@ -4,9 +4,20 @@ import { ICreateSpecificationDTO, ISpecificationRepository } from '../ISpecifica
 class SpecificationRepository implements ISpecificationRepository {
   private specifications: Specification[];
 
-  constructor() {
+  private static INSTANCE: SpecificationRepository;
+
+  private constructor() {
     this.specifications = [];
   }
+
+  private static getInstance(): SpecificationRepository {
+    if (!SpecificationRepository.INSTANCE) {
+      SpecificationRepository.INSTANCE = new SpecificationRepository();
+    }
+
+    return SpecificationRepository.INSTANCE;
+  }
+
   findByName(name: string): Specification {
     const specification = this.specifications.find((specification) => specification.name === name);
 
