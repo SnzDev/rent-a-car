@@ -4,12 +4,12 @@ import fs from 'fs';
 import { ICategoriesRepository } from '../../repositories/ICategoriesRepository';
 
 interface IImportCategory {
-  name: string;
-  description: string;
+    name: string;
+    description: string;
 }
 
 class ImportCategoryUseCase {
-  constructor(private categoriesRepository: ICategoriesRepository) { }
+  constructor(private categoriesRepository: ICategoriesRepository) {}
 
   loadCategories(file: Express.Multer.File): Promise<IImportCategory[]> {
     return new Promise((resolve, reject) => {
@@ -21,14 +21,16 @@ class ImportCategoryUseCase {
 
       stream.pipe(parseFile);
 
-      parseFile.on('data', async (line: string) => {
-        const [name, description] = line;
-        categories.push({ name, description });
-      })
+      parseFile
+        .on('data', async (line: string) => {
+          const [name, description] = line;
+          categories.push({ name, description });
+        })
         .on('end', () => {
+          fs.promises.unlink(file.path);
           resolve(categories);
         })
-        .on('error', (err) => {
+        .on('error', (err: any) => {
           reject(err);
         });
     });
@@ -44,7 +46,8 @@ class ImportCategoryUseCase {
 
       if (!existsCategory) {
         this.categoriesRepository.create({
-          name, description,
+          name,
+          description,
         });
       }
     });
