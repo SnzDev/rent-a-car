@@ -37,6 +37,7 @@
 			"no-shadow": "off",
 			"no-console": "off",
 			"no-useless-constructor": "off",
+			"no-multiple-empty-lines":2,
 			"no-empty-function": "off",
 			"lines-between-class-members": "off",
 			"import/extensions": [
